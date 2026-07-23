@@ -1,6 +1,6 @@
 package com.ra.coursemanagement.service;
 
-import com.ra.coursemanagement.model.StudentEnrollment;
+import com.ra.coursemanagement.model.Enrollment;
 import com.ra.coursemanagement.repository.EnrollmentRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +17,20 @@ public class EnrollmentService {
         this.repository = repository;
     }
 
-    public List<StudentEnrollment> getAll() {
+    public List<Enrollment> getAll() {
         return repository.findAll();
     }
 
-    public StudentEnrollment create(StudentEnrollment enrollment) {
+    public Enrollment create(Enrollment enrollment) {
         return repository.save(enrollment);
     }
 
-    public StudentEnrollment findEnrollmentById(Long id) {
+    public Enrollment findEnrollmentById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Enrollment not found with id: " + id));
     }
 
-    public StudentEnrollment update(Long id, StudentEnrollment newData) {
+    public Enrollment update(Long id, Enrollment newData) {
         return repository.update(id, newData);
     }
 

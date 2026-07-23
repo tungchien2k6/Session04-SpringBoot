@@ -1,7 +1,7 @@
 package com.ra.coursemanagement.controller;
 
 import com.ra.coursemanagement.dto.ApiResponse;
-import com.ra.coursemanagement.model.StudentEnrollment;
+import com.ra.coursemanagement.model.Enrollment;
 import com.ra.coursemanagement.service.EnrollmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,15 @@ public class EnrollmentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudentEnrollment>>> getAll() {
-        List<StudentEnrollment> data = service.getAll();
+    public ResponseEntity<ApiResponse<List<Enrollment>>> getAll() {
+        List<Enrollment> data = service.getAll();
         return ResponseEntity.ok(ApiResponse.success("Fetched enrollments successfully", data));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudentEnrollment>> getById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Enrollment>> getById(@PathVariable Long id) {
         try {
-            StudentEnrollment enrollment = service.findEnrollmentById(id);
+            Enrollment enrollment = service.findEnrollmentById(id);
             return ResponseEntity.ok(ApiResponse.success("Fetched enrollment successfully", enrollment));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(e.getMessage()));
@@ -36,15 +36,15 @@ public class EnrollmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<StudentEnrollment>> create(@RequestBody StudentEnrollment enrollment) {
-        StudentEnrollment saved = service.create(enrollment);
+    public ResponseEntity<ApiResponse<Enrollment>> create(@RequestBody Enrollment enrollment) {
+        Enrollment saved = service.create(enrollment);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Enrollment created successfully", saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudentEnrollment>> update(@PathVariable Long id, @RequestBody StudentEnrollment enrollment) {
-        StudentEnrollment updated = service.update(id, enrollment);
+    public ResponseEntity<ApiResponse<Enrollment>> update(@PathVariable Long id, @RequestBody Enrollment enrollment) {
+        Enrollment updated = service.update(id, enrollment);
         if (updated != null) {
             return ResponseEntity.ok(ApiResponse.success("Enrollment updated successfully", updated));
         }
