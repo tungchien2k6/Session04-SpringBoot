@@ -1,15 +1,66 @@
 package com.ra.session05ex01.controller;
 
+import com.ra.session05ex01.model.dto.CourseRequest;
+import com.ra.session05ex01.model.entity.Course;
 import com.ra.session05ex01.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
+@RequestMapping("/api/v1/courses")
 public class CourseController {
+
     private final CourseService courseService;
 
     @Autowired
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Course>> getAllCourses() {
+        List<Course> courses = courseService.getAllCourses();
+        return ResponseEntity.ok(courses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Course> getCourseById(@PathVariable int id) {
+        Course course = courseService.getCourseById(id);
+        if (course == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(course);
+    }
+
+    @PostMapping
+    public ResponseEntity<Course> createCourse(@RequestBody CourseRequest request) {
+        Course created = courseService.createCourse(request.getTitle(), request.getStatus(), request.getInstructorId());
+        if (created == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Course> updateCourse(@PathVariable int id, @RequestBody CourseRequest request) {
+        Course updated = courseService.updateCourse(id, request.getTitle(), request.getStatus(), request.getInstructorId());
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable int id) {
+        Course deleted = courseService.deleteCourseById(id);
+        if (deleted == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }
