@@ -1,5 +1,6 @@
 package com.ra.session05ex01.controller;
 
+import com.ra.session05ex01.model.dto.ApiResponse;
 import com.ra.session05ex01.model.dto.EnrollmentRequest;
 import com.ra.session05ex01.model.entity.Enrollment;
 import com.ra.session05ex01.service.EnrollmentService;
@@ -22,44 +23,44 @@ public class EnrollmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Enrollment>> getAllEnrollments() {
+    public ResponseEntity<ApiResponse<List<Enrollment>>> getAllEnrollments() {
         List<Enrollment> enrollments = enrollmentService.getAllEnrollments();
-        return ResponseEntity.ok(enrollments);
+        return ResponseEntity.ok(ApiResponse.success("Lấy danh sách đăng ký thành công", enrollments));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Enrollment>> getEnrollmentById(@PathVariable int id) {
         Enrollment enrollment = enrollmentService.getEnrollmentById(id);
         if (enrollment == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Không tìm thấy đăng ký với id: " + id));
         }
-        return ResponseEntity.ok(enrollment);
+        return ResponseEntity.ok(ApiResponse.success("Lấy thông tin đăng ký thành công",enrollment));
     }
 
     @PostMapping
-    public ResponseEntity<Enrollment> createEnrollment(@RequestBody EnrollmentRequest request) {
+    public ResponseEntity<ApiResponse<Enrollment>> createEnrollment(@RequestBody EnrollmentRequest request) {
         Enrollment created = enrollmentService.createEnrollment(request.getStudentName(), request.getCourseId());
         if (created == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("Không tìm thấy khóa học hoặc instructorId không hợp lệ"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Tạo đăng ký thành công", created));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Enrollment> updateEnrollment(@PathVariable int id, @RequestBody EnrollmentRequest request) {
+    public ResponseEntity<ApiResponse<Enrollment>> updateEnrollment(@PathVariable int id, @RequestBody EnrollmentRequest request) {
         Enrollment updated = enrollmentService.updateEnrollment(id, request.getStudentName(), request.getCourseId());
         if (updated == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Không tìm thấy đăng ký hoặc instructorId không hợp lệ"));
         }
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(ApiResponse.success("Cập nhật đăng ký thành công", updated));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEnrollment(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteEnrollment(@PathVariable int id) {
         Enrollment deleted = enrollmentService.deleteEnrollmentById(id);
         if (deleted == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Không tìm thấy đăng ký với id: " + id));
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success("Xóa đăng ký thành công", null));
     }
 }

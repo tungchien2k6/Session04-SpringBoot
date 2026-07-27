@@ -1,5 +1,6 @@
 package com.ra.session05ex01.controller;
 
+import com.ra.session05ex01.model.dto.ApiResponse;
 import com.ra.session05ex01.model.dto.CourseRequest;
 import com.ra.session05ex01.model.entity.Course;
 import com.ra.session05ex01.service.CourseService;
@@ -23,44 +24,49 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
+    public ResponseEntity<ApiResponse<List<Course>>> getAllCourses() {
         List<Course> courses = courseService.getAllCourses();
-        return ResponseEntity.ok(courses);
+        return ResponseEntity.ok(ApiResponse.success("Lấy danh sách khóa học thành công", courses));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable int id) {
         Course course = courseService.getCourseById(id);
         if (course == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error("Không tìm thấy khóa học với id: " + id));
         }
-        return ResponseEntity.ok(course);
+        return ResponseEntity.ok(ApiResponse.success("Lấy thông tin khóa học thành công", course));
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody CourseRequest request) {
+    public ResponseEntity<ApiResponse<Course>> createCourse(@RequestBody CourseRequest request) {
         Course created = courseService.createCourse(request.getTitle(), request.getStatus(), request.getInstructorId());
         if (created == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("instructorId không hợp lệ"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Tạo khóa học thành công", created));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable int id, @RequestBody CourseRequest request) {
+    public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable int id, @RequestBody CourseRequest request) {
         Course updated = courseService.updateCourse(id, request.getTitle(), request.getStatus(), request.getInstructorId());
         if (updated == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error("Không tìm thấy khóa học hoặc instructorId không hợp lệ"));
         }
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(ApiResponse.success("Cập nhật khóa học thành công", updated));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable int id) {
         Course deleted = courseService.deleteCourseById(id);
         if (deleted == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error("Không tìm thấy khóa học với id: " + id));
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success("Xóa khóa học thành công", null));
     }
 }
