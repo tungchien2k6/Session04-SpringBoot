@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/api/v1/courses")
@@ -31,12 +32,13 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable int id) {
-        Course course = courseService.getCourseById(id);
-        if (course == null) {
+        try {
+            Course course = courseService.getCourseById(id);
+            return ResponseEntity.ok(ApiResponse.success("Lấy thông tin khóa học thành công", course));
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.error("Không tìm thấy khóa học với id: " + id));
+                    .body(ApiResponse.error(e.getMessage()));
         }
-        return ResponseEntity.ok(ApiResponse.success("Lấy thông tin khóa học thành công", course));
     }
 
     @PostMapping

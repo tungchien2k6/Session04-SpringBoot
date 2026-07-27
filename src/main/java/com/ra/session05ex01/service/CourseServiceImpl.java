@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -28,25 +29,19 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getCourseById(int id) {
-        return courseRepository.findById(id);
+        return courseRepository.findById(id).orElseThrow(()->new NoSuchElementException("Course không tồn tại với id: " + id));
     }
 
     @Override
     public Course createCourse(String title, String status, int instructorId) {
-        Instructor instructor = instructorRepository.findById(instructorId);
-        if (instructor == null) {
-            return null;
-        }
+        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(() -> new NoSuchElementException("Instructor không tồn tại với id: " + instructorId));
         Course newCourse = new Course(0, title, status, instructorId);
         return courseRepository.create(newCourse);
     }
 
     @Override
     public Course updateCourse(int id, String title, String status, int instructorId) {
-        Instructor instructor = instructorRepository.findById(instructorId);
-        if (instructor == null) {
-            return null;
-        }
+        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(()-> new NoSuchElementException("Instructor không tồn tại với id: " + instructorId));
         Course updatedData = new Course(0, title, status, instructorId);
         return courseRepository.update(id, updatedData);
     }

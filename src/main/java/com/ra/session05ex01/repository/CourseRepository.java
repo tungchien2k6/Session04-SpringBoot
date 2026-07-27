@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Repository
 public class CourseRepository {
@@ -16,13 +18,8 @@ public class CourseRepository {
         return courses;
     }
 
-    public Course findById(int id) {
-        for (Course course : courses) {
-            if (course.getId() == id) {
-                return course;
-            }
-        }
-        return null;
+    public Optional<Course> findById(int id) {
+        return courses.stream().filter(c -> c.getId() == id).findFirst();
     }
 
     public Course create(Course course) {
@@ -32,10 +29,7 @@ public class CourseRepository {
     }
 
     public Course update(int id, Course updatedCourse) {
-        Course existing = findById(id);
-        if (existing == null) {
-            return null;
-        }
+        Course existing = findById(id).orElseThrow(() -> new NoSuchElementException("Course không tồn tại với id: " + id));
         existing.setTitle(updatedCourse.getTitle());
         existing.setStatus(updatedCourse.getStatus());
         existing.setInstructorId(updatedCourse.getInstructorId());
@@ -43,10 +37,8 @@ public class CourseRepository {
     }
 
     public Course deleteById(int id) {
-        Course existing = findById(id);
-        if (existing != null) {
-            courses.remove(existing);
-        }
+        Course existing = findById(id).orElseThrow(() -> new NoSuchElementException("Course không tồn tại với id: " + id));
+        courses.remove(existing);
         return existing;
     }
 }

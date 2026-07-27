@@ -1,11 +1,12 @@
 package com.ra.session05ex01.repository;
 
-import com.ra.session05ex01.model.entity.Course;
 import com.ra.session05ex01.model.entity.Enrollment;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Repository
 public class EnrollmentRepository {
@@ -22,13 +23,8 @@ public class EnrollmentRepository {
         return enrollments;
     }
 
-    public Enrollment findById(int id) {
-        for (Enrollment enrollment : enrollments) {
-            if (enrollment.getId() == id) {
-                return enrollment;
-            }
-        }
-        return null;
+    public Optional<Enrollment> findById(int id) {
+        return enrollments.stream().filter(e -> e.getId() == id).findFirst();
     }
 
     public Enrollment create(Enrollment enrollment) {
@@ -38,20 +34,15 @@ public class EnrollmentRepository {
     }
 
     public Enrollment update(int id, Enrollment updatedEnrollment) {
-        Enrollment existing = findById(id);
-        if (existing == null) {
-            return null;
-        }
+        Enrollment existing = findById(id).orElseThrow(() -> new NoSuchElementException("Enrollment không tồn tại với id: " + id));
         existing.setStudentName(updatedEnrollment.getStudentName());
         existing.setCourseId(updatedEnrollment.getCourseId());
         return existing;
     }
 
     public Enrollment deleteById(int id) {
-        Enrollment existing = findById(id);
-        if (existing != null) {
-            enrollments.remove(existing);
-        }
+        Enrollment existing = findById(id).orElseThrow(() -> new NoSuchElementException("Enrollment không tồn tại với id: " + id));
+        enrollments.remove(existing);
         return existing;
     }
 }

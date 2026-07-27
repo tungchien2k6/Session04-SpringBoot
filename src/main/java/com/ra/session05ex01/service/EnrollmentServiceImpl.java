@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
@@ -28,25 +29,19 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Enrollment getEnrollmentById(int id) {
-        return enrollmentRepository.findById(id);
+        return enrollmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy đăng ký với id: " + id));
     }
 
     @Override
     public Enrollment createEnrollment(String studentName, int courseId) {
-        Course course = courseRepository.findById(courseId);
-        if (course == null) {
-            return null;
-        }
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new NoSuchElementException("Không tìm thấy khóa học với id: " + courseId));
         Enrollment newEnrollment = new Enrollment(0, studentName, courseId);
         return enrollmentRepository.create(newEnrollment);
     }
 
     @Override
     public Enrollment updateEnrollment(int id, String studentName, int courseId) {
-        Course course = courseRepository.findById(courseId);
-        if (course == null) {
-            return null;
-        }
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new NoSuchElementException("Không tìm thấy khóa học với id: " + courseId));
         Enrollment updatedData = new Enrollment(0, studentName, courseId);
         return enrollmentRepository.update(id, updatedData);
     }
