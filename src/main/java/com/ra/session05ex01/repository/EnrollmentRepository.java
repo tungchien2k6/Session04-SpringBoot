@@ -13,12 +13,6 @@ public class EnrollmentRepository {
     private final List<Enrollment> enrollments = new ArrayList<>();
     private int nextId = 1;
 
-    public EnrollmentRepository() {
-        enrollments.add(new Enrollment(nextId++, "Nguyen Van A", 1));
-        enrollments.add(new Enrollment(nextId++, "Nguyen Van B", 1));
-        enrollments.add(new Enrollment(nextId++, "Nguyen Van C", 2));
-    }
-
     public List<Enrollment> findAll() {
         return enrollments;
     }

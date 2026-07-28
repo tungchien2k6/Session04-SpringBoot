@@ -31,7 +31,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable Long id) {
         try {
             Course course = courseService.getCourseById(id);
             return ResponseEntity.ok(ApiResponse.success("Lấy thông tin khóa học thành công", course));
@@ -53,7 +53,7 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable int id, @RequestBody CourseRequest request) {
+    public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable Long id, @RequestBody CourseRequest request) {
         Course updated = courseService.updateCourse(id, request.getTitle(), request.getStatus(), request.getInstructorId());
         if (updated == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -63,7 +63,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Long id) {
         Course deleted = courseService.deleteCourseById(id);
         if (deleted == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

@@ -1,23 +1,38 @@
 package com.ra.session05ex01.model.entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "instructors")
 public class Instructor {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 100, nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String email;
 
     public Instructor() {}
 
-    public Instructor(int id, String name, String email) {
+    public Instructor(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

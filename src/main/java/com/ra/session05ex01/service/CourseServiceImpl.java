@@ -1,9 +1,8 @@
 package com.ra.session05ex01.service;
 
 import com.ra.session05ex01.model.entity.Course;
-import com.ra.session05ex01.model.entity.Instructor;
+import com.ra.session05ex01.model.entity.CourseStatus;
 import com.ra.session05ex01.repository.CourseRepository;
-import com.ra.session05ex01.repository.InstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +13,10 @@ import java.util.NoSuchElementException;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final InstructorRepository instructorRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, InstructorRepository instructorRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
-        this.instructorRepository = instructorRepository;
     }
 
     @Override
@@ -28,26 +25,29 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourseById(int id) {
+    public Course getCourseById(Long id) {
         return courseRepository.findById(id).orElseThrow(()->new NoSuchElementException("Course không tồn tại với id: " + id));
     }
 
     @Override
-    public Course createCourse(String title, String status, int instructorId) {
-        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(() -> new NoSuchElementException("Instructor không tồn tại với id: " + instructorId));
-        Course newCourse = new Course(0, title, status, instructorId);
-        return courseRepository.create(newCourse);
+    public Course createCourse(String title, CourseStatus status, Long instructorId) {
+        Course newCourse = new Course(null, title, status, instructorId);
+        return courseRepository.save(newCourse);
     }
 
     @Override
-    public Course updateCourse(int id, String title, String status, int instructorId) {
-        Instructor instructor = instructorRepository.findById(instructorId).orElseThrow(()-> new NoSuchElementException("Instructor không tồn tại với id: " + instructorId));
-        Course updatedData = new Course(0, title, status, instructorId);
-        return courseRepository.update(id, updatedData);
+    public Course updateCourse(Long id, String title, CourseStatus status, Long instructorId) {
+        Course existing = courseRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Course không tồn tại với id: " + id));
+        existing.setTitle(title);
+        existing.setStatus(status);
+        existing.setInstructorId(instructorId);
+        return courseRepository.save(existing);
     }
 
     @Override
-    public Course deleteCourseById(int id) {
-        return courseRepository.deleteById(id);
+    public Course deleteCourseById(Long id) {
+        Course existing = courseRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Course không tồn tại với id: " + id));
+        courseRepository.deleteById(id);
+        return existing;
     }
 }

@@ -3,11 +3,11 @@ package com.ra.session05ex01.model.entity;
 public class Enrollment {
     private int id;
     private String studentName;
-    private int courseId;
+    private Long courseId;
 
     public Enrollment() {}
 
-    public Enrollment(int id, String studentName, int courseId) {
+    public Enrollment(int id, String studentName, Long courseId) {
         this.id = id;
         this.studentName = studentName;
         this.courseId = courseId;
@@ -21,11 +21,11 @@ public class Enrollment {
         this.id = id;
     }
 
-    public int getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 

@@ -31,7 +31,7 @@ public class InstructorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Instructor>> getInstructorById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Instructor>> getInstructorById(@PathVariable Long id) {
         try {
             Instructor instructor = instructorService.getInstructorById(id);
             return ResponseEntity.ok(ApiResponse.success("Lấy thông tin giảng viên thành công",instructor));
@@ -50,7 +50,7 @@ public class InstructorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Instructor>> updateInstructor(@PathVariable int id, @RequestBody InstructorRequest request) {
+    public ResponseEntity<ApiResponse<Instructor>> updateInstructor(@PathVariable Long id, @RequestBody InstructorRequest request) {
         Instructor updated = instructorService.updateInstructor(id, request.getName(), request.getEmail());
         if (updated == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Không tìm thấy giảng viên hoặc email đã tồn tại"));
@@ -59,7 +59,7 @@ public class InstructorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteInstructor(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteInstructor(@PathVariable Long id) {
         Instructor deleted = instructorService.deleteInstructorById(id);
         if (deleted == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Không tìm thấy giảng viên với id: " + id));

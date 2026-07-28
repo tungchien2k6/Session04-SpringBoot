@@ -1,13 +1,15 @@
 package com.ra.session05ex01.model.dto;
 
+import com.ra.session05ex01.model.entity.CourseStatus;
+
 public class CourseRequest {
     private String title;
-    private String status;
-    private int instructorId;
+    private CourseStatus status;
+    private Long instructorId;
 
     public CourseRequest() {}
 
-    public CourseRequest(String title, String status, int instructorId) {
+    public CourseRequest(String title, CourseStatus status, Long instructorId) {
         this.title = title;
         this.status = status;
         this.instructorId = instructorId;
@@ -21,19 +23,19 @@ public class CourseRequest {
         this.title = title;
     }
 
-    public String getStatus() {
+    public CourseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CourseStatus status) {
         this.status = status;
     }
 
-    public int getInstructorId() {
+    public Long getInstructorId() {
         return instructorId;
     }
 
-    public void setInstructorId(int instructorId) {
+    public void setInstructorId(Long instructorId) {
         this.instructorId = instructorId;
     }
 }

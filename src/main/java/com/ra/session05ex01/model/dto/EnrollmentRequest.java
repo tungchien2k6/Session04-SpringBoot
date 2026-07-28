@@ -2,21 +2,21 @@ package com.ra.session05ex01.model.dto;
 
 public class EnrollmentRequest {
     private String studentName;
-    private int courseId;
+    private Long courseId;
 
     public EnrollmentRequest() {
     }
 
-    public EnrollmentRequest(String studentName, int courseId) {
+    public EnrollmentRequest(String studentName, Long courseId) {
         this.studentName = studentName;
         this.courseId = courseId;
     }
 
-    public int getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface InstructorService {
     List<Instructor> getAllInstructors();
-    Instructor getInstructorById(int id);
+    Instructor getInstructorById(Long id);
     Instructor createInstructor(String name, String email);
-    Instructor updateInstructor(int id, String name, String email);
-    Instructor deleteInstructorById(int id);
+    Instructor updateInstructor(Long id, String name, String email);
+    Instructor deleteInstructorById(Long id);
 }

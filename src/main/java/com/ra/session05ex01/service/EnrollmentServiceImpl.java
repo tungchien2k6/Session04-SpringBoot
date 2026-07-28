@@ -33,14 +33,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Enrollment createEnrollment(String studentName, int courseId) {
+    public Enrollment createEnrollment(String studentName, Long courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new NoSuchElementException("Không tìm thấy khóa học với id: " + courseId));
         Enrollment newEnrollment = new Enrollment(0, studentName, courseId);
         return enrollmentRepository.create(newEnrollment);
     }
 
     @Override
-    public Enrollment updateEnrollment(int id, String studentName, int courseId) {
+    public Enrollment updateEnrollment(int id, String studentName, Long courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new NoSuchElementException("Không tìm thấy khóa học với id: " + courseId));
         Enrollment updatedData = new Enrollment(0, studentName, courseId);
         return enrollmentRepository.update(id, updatedData);
